@@ -9,7 +9,7 @@ Download `SRR.txt` and `SraRunTable.txt` files from NCBI SRA Run Selector [https
 Download fastq files
 --------------------
 ```bash
-> cat SRR.txt | while read -r ID; do echo $ID; fastq-dump --split-files $ID; done
+cat SRR.txt | while read -r ID; do echo $ID; fastq-dump --split-files $ID; done
 ```
 
 Renaming files
