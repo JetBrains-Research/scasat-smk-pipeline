@@ -93,8 +93,8 @@ Notable output files for further downstream analysis:
   and filtering (see `qc/samtools_stats` for individual reports)
 - aligned reads:
   - `cleaned` -- coordinate-sorted BAM files for individual single cells
-  - `cleaned_cells` -- coordinate-sorted BAM files for pooled cell type data
-  - `cleaned_all` -- coordinate-sorted BAM file for total pooled data  
+  - `cleaned_cells_sorted` -- coordinate-sorted BAM files for pooled cell type data
+  - `cleaned_all_sorted` -- coordinate-sorted BAM file for total pooled data  
 - visualization:
   - `cleaned_cells_sorted/bw` -- bigWig files for pooled cell type data
   - `cleaned_all_sorted/bw` -- bigWig file for total pooled data
