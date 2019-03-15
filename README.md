@@ -52,7 +52,7 @@ $ source activate snakemake
 ```
 Run the pipeline:
 ```bash
-$ snakemake all [--cores <cores>] --config work_dir=<work_dir> fastq_dir=<fastq_dir> indexes=<bowtie2_indexes>
+$ snakemake all [--cores <cores>] --use-conda --config work_dir=<work_dir> fastq_dir=<fastq_dir> indexes=<bowtie2_indexes>
 
 ```
 Here `<work_dir>` is the directory where the output and temporary files will be created,
