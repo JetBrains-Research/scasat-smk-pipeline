@@ -117,9 +117,9 @@ rule samtools_filter:
 rule download_blacklist:
     output: "blacklist/wgEncodeDacMapabilityConsensusExcludable.bed"
     shell: 'wget -O - '
-'http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/'
-'wgEncodeMapability/wgEncodeDacMapabilityConsensusExcludable.bed.gz'
-' | gunzip -c > {output}'
+           'http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/'
+           'wgEncodeMapability/wgEncodeDacMapabilityConsensusExcludable.bed.gz'
+           ' | gunzip -c > {output}'
 
 
 rule remove_blacklist:
@@ -167,7 +167,7 @@ rule clean_bams:
     output: "cleaned/{sample}.bam"
     conda: "envs/samtools.env.yaml"
     shell: 'samtools view -b {input.bam} chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 '
-'chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX > {output}'
+           'chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX > {output}'
 
 
 rule index_cleaned_bams:
