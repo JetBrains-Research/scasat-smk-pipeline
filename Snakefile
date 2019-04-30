@@ -240,9 +240,49 @@ rule call_peaks_macs2_all:
            '-p 0.0001 -g hs -f BAMPE --nomodel --nolambda -B --keep-dup all --call-summits'
 
 
+rule download_span:
+    output: "bin/span-0.10.0.jar"
+    shell: 'wget -O {output} https://download.jetbrains.com/biolabs/span/span-0.10.0.4787.jar'
+
+
+rule download_chrom_sizes:
+    output: "hg19.chrom.sizes"
+    shell: 'wget -O {output} http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes'
+
+
+rule call_peaks_span_cell:
+    input:
+        bam="cleaned_cells/{cell_name}.bam",
+        span=rules.download_span.output,
+        chrom_sizes=rules.download_chrom_sizes.output
+    output: "cleaned_cell_peaks/span/{cell_name}_{bin, [0-9]+}.span"
+    params:
+        outdir=lambda wildcards, output: os.path.dirname(str(output)),
+        xmx=lambda wildcards: str(800 // int(wildcards.bin))
+    threads: 8
+    shell: 'java -Xmx{params.xmx}G -jar {input.span} analyze -t {input.bam} --workdir {params.outdir} --fragment 0 '
+           '--bin {wildcards.bin} --cs {input.chrom_sizes} --threads {threads} --model {output} --keep-dup true --debug; '
+
+
+rule call_peaks_span_all:
+    input:
+        bam="cleaned_all/pooled.bam",
+        span=rules.download_span.output,
+        chrom_sizes=rules.download_chrom_sizes.output
+    output: "cleaned_all_peaks/span/pooled_{bin, [0-9]+}.span"
+    params:
+        outdir=lambda wildcards, output: os.path.dirname(str(output)),
+        xmx=lambda wildcards: str(800 // int(wildcards.bin))
+    threads: 8
+    shell: 'java -Xmx{params.xmx}G -jar {input.span} analyze -t {input.bam} --workdir {params.outdir} --fragment 0 '
+           '--bin {wildcards.bin} --cs {input.chrom_sizes} --threads {threads} --model {output} --keep-dup true --debug; '
+
+
 rule all:
     input:
          expand("cleaned_cell_peaks/macs2/{cell_name}_peaks.narrowPeak", cell_name=cell_names_dict().keys()),
          "cleaned_all_peaks/macs2/pooled_peaks.narrowPeak",
+         expand("cleaned_cell_peaks/span/{cell_name}_100.span", cell_name=cell_names_dict().keys()),
+         "cleaned_all_peaks/span/pooled_100.span",
          expand("cleaned_cells/bw/{cell_name}.bw", cell_name=cell_names_dict().keys()),
          "cleaned_all/bw/pooled.bw"
