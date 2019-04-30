@@ -38,9 +38,9 @@ indexes for the appropriate genome build.
 * If `conda` is not installed,
 follow the instructions at
 [Conda website](https://conda.io/projects/conda/en/latest/user-guide/install/index.html).
-* Navigate to `pipeline` subdirectory.
+* Navigate to repository directory.
 ```bash
-$ cd pipeline
+$ cd sc-atacseq-smk-pipeline
 ```
 Create a Conda environment for `snakemake`:
 ```bash
