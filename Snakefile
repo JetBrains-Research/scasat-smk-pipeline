@@ -261,7 +261,7 @@ rule call_peaks_span_cell:
         xmx=lambda wildcards: str(800 // int(wildcards.bin))
     threads: 8
     shell: 'java -Xmx{params.xmx}G -jar {input.span} analyze -t {input.bam} --workdir {params.outdir} --fragment 0 '
-           '--bin {wildcards.bin} --cs {input.chrom_sizes} --threads {threads} --model {output} --keep-dup true --debug; '
+           '--bin {wildcards.bin} --cs {input.chrom_sizes} --threads {threads} --model {output} --keep-dup --debug; '
 
 
 rule call_peaks_span_all:
@@ -275,7 +275,7 @@ rule call_peaks_span_all:
         xmx=lambda wildcards: str(800 // int(wildcards.bin))
     threads: 8
     shell: 'java -Xmx{params.xmx}G -jar {input.span} analyze -t {input.bam} --workdir {params.outdir} --fragment 0 '
-           '--bin {wildcards.bin} --cs {input.chrom_sizes} --threads {threads} --model {output} --keep-dup true --debug; '
+           '--bin {wildcards.bin} --cs {input.chrom_sizes} --threads {threads} --model {output} --keep-dup --debug; '
 
 
 rule all:
@@ -284,5 +284,5 @@ rule all:
          "cleaned_all_peaks/macs2/pooled_peaks.narrowPeak",
          expand("cleaned_cell_peaks/span/{cell_name}_100.span", cell_name=cell_names_dict().keys()),
          "cleaned_all_peaks/span/pooled_100.span",
-         expand("cleaned_cells/bw/{cell_name}.bw", cell_name=cell_names_dict().keys()),
-         "cleaned_all/bw/pooled.bw"
+         expand("cleaned_cells_sorted/bw/{cell_name}.bw", cell_name=cell_names_dict().keys()),
+         "cleaned_all_sorted/bw/pooled.bw"
