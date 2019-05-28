@@ -222,12 +222,12 @@ rule call_peaks_macs2_all:
           macs2_stats=config.get('macs2_stats', '-p 0.0001')
     conda: "envs/macs2.env.yaml"
     shell:
-         'macs2 callpeak -t {input} --outdir {params.outdir} -n pooled_{wildcards.macs2_suffix} ' \
+         'macs2 callpeak -t {input} --outdir {params.outdir} -n pooled_{wildcards.macs2_suffix} '
          '{params.macs2_stats} -g hs -f BAMPE --nomodel --nolambda -B --keep-dup all --call-summits'
 
 rule download_span:
     output: "bin/span-0.11.0.jar"
-    shell: 'wget -O {output} https://download.jetbrains.com/biolabs/span/span-0.11.XXXX.jar'
+    shell: 'wget -O {output} https://download.jetbrains.com/biolabs/span/span-0.11.0.4882.jar'
 
 rule download_chrom_sizes:
     output: "{config[genome]}.chrom.sizes"
@@ -244,7 +244,7 @@ rule call_peaks_span_cell:
           xmx=lambda wildcards: str(800 // int(wildcards.bin))
     threads: 8
     shell:
-         'java -Xmx{params.xmx}G -jar {input.span} analyze -t {input.bam} --workdir {params.outdir} --fragment 0 ' \
+         'java -Xmx{params.xmx}G -jar {input.span} analyze -t {input.bam} --workdir {params.outdir} --fragment 0 '
          '--bin {wildcards.bin} --cs {input.chrom_sizes} --threads {threads} --model {output} --keep-dup true --debug; '
 
 rule call_peaks_span_all:
@@ -258,7 +258,7 @@ rule call_peaks_span_all:
           xmx=lambda wildcards: str(800 // int(wildcards.bin))
     threads: 8
     shell:
-         'java -Xmx{params.xmx}G -jar {input.span} analyze -t {input.bam} --workdir {params.outdir} --fragment 0 ' \
+         'java -Xmx{params.xmx}G -jar {input.span} analyze -t {input.bam} --workdir {params.outdir} --fragment 0 '
          '--bin {wildcards.bin} --cs {input.chrom_sizes} --threads {threads} --model {output} --keep-dup --debug; '
 
 rule all:
