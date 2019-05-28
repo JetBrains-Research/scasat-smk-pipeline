@@ -113,3 +113,5 @@ Notable output files for further downstream analysis:
 - peaks:
   - `cleaned_cell_peaks/macs2` -- MACS2 peaks for pooled cell type data 
   - `cleaned_all_peaks/macs2` -- MACS2 peaks for total pooled data
+  - `cleaned_cell_peaks/span` -- Span models for pooled cell type data 
+  - `cleaned_all_peaks/span` -- Span model for total pooled data
