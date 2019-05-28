@@ -148,6 +148,15 @@ rule index_bams:
     output: "{anywhere}/{sample, [^/]*}.bam.bai"
     wrapper: "0.31.1/bio/samtools/index"
 
+rule bam2bw:
+    input:
+        bam="{anywhere}/{filename}.bam",
+        bai="{anywhere}/{filename}.bam.bai"
+    output: "{anywhere}/bw/{filename, [^/]*}.bw"
+    conda: "envs/deeptools.environment.yaml"
+    threads: 4
+    shell: 'bamCoverage -b {input.bam} -p {threads} -o {output}'
+
 rule clean_bams:
     input:
          bam="deduplicated_sorted/{sample}.bam",
