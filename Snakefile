@@ -143,9 +143,9 @@ rule sort_deduplicated_bams:
     threads: 4
     wrapper: '0.31.1/bio/samtools/sort'
 
-rule index_deduplicated_bams:
-    input: "deduplicated_sorted/{sample}.bam"
-    output: "deduplicated_sorted/{sample}.bam.bai"
+rule index_bams:
+    input: "{anywhere}/{sample}.bam"
+    output: "{anywhere}/{sample, [^/]*}.bam.bai"
     wrapper: "0.31.1/bio/samtools/index"
 
 rule clean_bams:
@@ -158,11 +158,6 @@ rule clean_bams:
     conda: "envs/samtools.env.yaml"
     shell:
          'samtools view -b {input.bam} {params.chrs} > {output}'
-
-rule index_cleaned_bams:
-    input: "cleaned/{sample}.bam"
-    output: "cleaned/{sample}.bam.bai"
-    wrapper: "0.31.1/bio/samtools/index"
 
 rule bam_stats:
     input: "cleaned/{sample}.bam"
