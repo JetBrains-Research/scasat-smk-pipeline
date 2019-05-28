@@ -31,6 +31,25 @@ for FILE in $(find . -name "*.fastq"); do
 done
 ```
 
+Edit configuration file
+-----------------------
+Edit the provided `config.yaml` file to reflect the properties of your pipeline.
+- `work_dir` is the directory where the output and temporary files will be created,
+- `fastq_dir` is the directory that houses the raw FASTQ files that have been downloaded
+and renamed in the previous steps.
+- `indexes` is the path to `bowtie2` index files together with the genome build.
+For example, if the indexes reside at `/home/user/index`
+and are named `hg19.1.bt2` etc., then you should provide the exact string `/home/user/index/hg19` as `indexes`.
+- `genome` is the genome build, e.g. `hg19`. It will be used to download `chrom.sizes` from UCSC site.
+- `chromosomes` is the list of chromosomes that you want to retain. For human genome, that's normally `chr1` through
+`chr22` and `chrX`. Other chromosomes will be discarded.
+- `blacklist` is the URL of mapability blacklist, e.g.
+```
+http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeMapability/wgEncodeDacMapabilityConsensusExcludable.bed.gz
+``` 
+It will be used to filter the mapped reads.
+
+
 Launching Pipeline
 ------------------
 The only tool required to launch the pipeline is `conda`. You'll also need `bowtie2`
@@ -52,16 +71,9 @@ $ source activate snakemake
 ```
 Run the pipeline:
 ```bash
-$ snakemake all [--cores <cores>] --use-conda --config work_dir=<work_dir> fastq_dir=<fastq_dir> indexes=<bowtie2_indexes>
+$ snakemake all [--cores <cores>] --use-conda
 
 ```
-Here `<work_dir>` is the directory where the output and temporary files will be created,
-`<fastq_dir>` is the directory that houses the raw FASTQ files that have been downloaded
-and renamed in the previous steps, and `<bowtie2_indexes>` is the path to `bowtie2` index
-files together with the genome build.
-For example, if the indexes reside at `/home/user/index`
-and are named `hg19.1.bt2` etc., then you should substitute `<bowtie2_indexes>` with the
-exact string `/home/user/index/hg19`.
 
 The pipeline can take a significant time to complete. To speed it up, you can provide
 more computational power using `<cores>` parameter. This will allow the pipeline
