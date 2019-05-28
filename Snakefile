@@ -4,6 +4,9 @@ from glob import glob
 
 include: "bam2bw.smk"
 
+configfile: "config.yaml"
+
+
 print('CONFIG\n{}'.format('\n'.join(['{}: {}'.format(k, v) for k, v in config.items()])))
 
 
@@ -108,12 +111,9 @@ rule samtools_filter:
     wrapper: "0.31.1/bio/samtools/view"
 
 rule download_blacklist:
-    output: "blacklist/wgEncodeDacMapabilityConsensusExcludable.bed"
+    output: "blacklist/blacklist.bed"
     shell:
-         'wget -O - ' \
-         'http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/' \
-         'wgEncodeMapability/wgEncodeDacMapabilityConsensusExcludable.bed.gz' \
-         ' | gunzip -c > {output}'
+         'wget -O - "{config[blacklist]}" | gunzip -c > {output}'
 
 rule remove_blacklist:
     input:
@@ -153,10 +153,11 @@ rule clean_bams:
          bam="deduplicated_sorted/{sample}.bam",
          bai="deduplicated_sorted/{sample}.bam.bai"
     output: "cleaned/{sample}.bam"
+    params:
+         chrs=' '.join(config['chromosomes'])
     conda: "envs/samtools.env.yaml"
     shell:
-         'samtools view -b {input.bam} chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 ' \
-         'chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22 chrX > {output}'
+         'samtools view -b {input.bam} {params.chrs} > {output}'
 
 rule index_cleaned_bams:
     input: "cleaned/{sample}.bam"
@@ -229,8 +230,8 @@ rule download_span:
     shell: 'wget -O {output} https://download.jetbrains.com/biolabs/span/span-0.11.XXXX.jar'
 
 rule download_chrom_sizes:
-    output: "hg19.chrom.sizes"
-    shell: 'wget -O {output} http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes'
+    output: "{config[genome]}.chrom.sizes"
+    shell: 'wget -O {output} http://hgdownload.cse.ucsc.edu/goldenPath/{config[genome]}/bigZips/{config[genome]}.chrom.sizes'
 
 rule call_peaks_span_cell:
     input:
