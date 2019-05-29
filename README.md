@@ -72,7 +72,6 @@ $ source activate snakemake
 Run the pipeline:
 ```bash
 $ snakemake all [--cores <cores>] --use-conda
-
 ```
 
 The pipeline can take a significant time to complete. To speed it up, you can provide
