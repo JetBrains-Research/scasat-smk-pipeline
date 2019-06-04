@@ -40,6 +40,18 @@ def cell_names_dict():
             for cell_name in cell_names}
 
 
+def macs2_genome_size():
+    if 'effective_genome_size' in config:
+        return str(config['effective_genome_size'])
+    build_to_gsize = {'hg': 'hs', 'mm': 'mm', 'dm': 'dm', 'ce': 'ce'}
+    build = config['genome'][:2]
+    if build in build_to_gsize:
+        return build_to_gsize[build]
+    raise ValueError("Effective genome size (as required by MACS2) not known for build {genome}, please specify it"
+                     "via configuration key 'effective_genome_size'".format(genome=config['genome']))
+
+
+
 workdir: config["work_dir"]
 
 rule fastqc:
