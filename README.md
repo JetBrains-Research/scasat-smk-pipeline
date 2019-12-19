@@ -1,3 +1,5 @@
+[![JetBrains Research](https://jb.gg/badges/research.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+
 # sc-atacseq-smk-pipeline
 Single cell ATAC-Seq Snakemake pipeline.
 
